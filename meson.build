@@ -13,6 +13,7 @@ source_paths = [
 	'src/memory/misc.c',
 	'src/number/misc.c',
 	'src/number/string.c',
+	'src/string/buffer.c',
 	'src/string/format.c',
 	'src/string/number.c',
 	'src/string/misc.c',

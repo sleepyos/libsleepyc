@@ -5,10 +5,38 @@
 #ifndef __SLEEPYC__STRING_H
 #define __SLEEPYC__STRING_H
 
+typedef struct StringRef {
+	const char *ptr;
+	size_t len;
+} StringRef_t;
+
+typedef struct StringMut {
+	union {
+		struct StringRef ref;
+		struct {
+			char *ptr;
+			size_t len;
+		};
+	};
+} StringMut_t;
+
+typedef struct StringBuf {
+	union {
+		struct StringMut mut;
+		struct StringRef ref;
+	};
+	size_t cap;
+} StringBuf_t;
+
+/* string/buffer.c */
+
+extern StringBuf_t StringBufNew(size_t);
+extern void StringBufFree(StringBuf_t);
+
 /* string/format.c */
 
-extern size_t StringFormatBuffer_va(char *, size_t , const char *, va_list);
-extern size_t StringFormatBuffer(char *, size_t , const char *, ...);
+extern size_t StringFormatBuffer_va(StringBuf_t, const char *, va_list);
+extern size_t StringFormatBuffer(StringBuf_t, const char *, ...);
 
 /* string/misc.c */
 

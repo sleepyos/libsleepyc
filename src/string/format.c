@@ -5,38 +5,38 @@
 #include <sleepyc/number.h>
 
 size_t StringFormatBuffer__putc
-(char ch, char *buf, size_t buf_len, size_t *bufi)
+(char ch, StringBuf_t buf, size_t *bufi)
 {
-	if (*bufi >= buf_len)
+	if (*bufi >= buf.cap)
 	{
 		return 0;
 	}
 
-	buf[(*bufi)++] = ch;
-	buf[*bufi] = '\0';
+	buf.mut.ptr[(*bufi)++] = ch;
+	buf.mut.ptr[*bufi] = '\0';
 
 	return 1;
 }
 
 size_t StringFormatBuffer__puts
-(char *ch, size_t ch_len, char *buf, size_t buf_len, size_t *bufi)
+(char *ch, size_t ch_len, StringBuf_t buf, size_t *bufi)
 {
-	if ((*bufi + ch_len) >= buf_len)
+	if ((*bufi + ch_len) >= buf.cap)
 	{
-		ch_len = buf_len - *bufi - 1;
+		ch_len = buf.cap - *bufi - 1;
 	}
 
 	for (size_t i = 0; i < ch_len; i++)
 	{
-		buf[(*bufi)++] = ch[i];
+		buf.mut.ptr[(*bufi)++] = ch[i];
 	}
 
-	buf[*bufi] = '\0';
+	buf.mut.ptr[*bufi] = '\0';
 	return ch_len;
 }
 
 size_t StringFormatBuffer_va
-(char *buf, size_t buf_len, const char *fmt, va_list ap)
+(StringBuf_t buf, const char *fmt, va_list ap)
 {
 	size_t fmt_len = StringLength(fmt);
 
@@ -49,13 +49,13 @@ size_t StringFormatBuffer_va
 
 	while (fmti <= fmt_len)
 	{
-		if (bufi >= buf_len)
+		if (bufi >= buf.cap)
 			break;
 
 		char ch = fmt[fmti];
 		if (ch != '{')
 		{
-			StringFormatBuffer__putc(ch, buf, buf_len, &bufi);
+			StringFormatBuffer__putc(ch, buf, &bufi);
 			fmti++;
 			continue;
 		}
@@ -91,29 +91,29 @@ size_t StringFormatBuffer_va
 				return bufi;
 
 			case 'c':
-				StringFormatBuffer__putc((char)va_arg(ap, int), buf, buf_len, &bufi);
+				StringFormatBuffer__putc((char)va_arg(ap, int), buf, &bufi);
 				break;
 
 			case 's':
 				ptr = va_arg(ap, char*);
-				StringFormatBuffer__puts(ptr, StringLength(ptr), buf, buf_len, &bufi);
+				StringFormatBuffer__puts(ptr, StringLength(ptr), buf, &bufi);
 				break;
 
 			case 'u':
 			case 'd':
 				len = NumberToStringRadix(va_arg(ap, long long int), 10, (ch == 'u'), zero_pad, pbuf);
-				StringFormatBuffer__puts(pbuf, len, buf, buf_len, &bufi);
+				StringFormatBuffer__puts(pbuf, len, buf, &bufi);
 				break;
 
 			case 'x':
 			case 'X':
 				if (alt_mode)
 				{
-					StringFormatBuffer__puts("0x", 2, buf, buf_len, &bufi);
+					StringFormatBuffer__puts("0x", 2, buf, &bufi);
 				}
 
 				len = NumberToStringRadix(va_arg(ap, long long int), 16, true, zero_pad, pbuf);
-				StringFormatBuffer__puts(pbuf, len, buf, buf_len, &bufi);
+				StringFormatBuffer__puts(pbuf, len, buf, &bufi);
 				break;
 
 			case '}':
@@ -136,12 +136,12 @@ size_t StringFormatBuffer_va
 }
 
 size_t StringFormatBuffer
-(char *buf, size_t buf_len, const char *fmt, ...)
+(StringBuf_t buf, const char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
 
-	size_t ret = StringFormatBuffer_va(buf, buf_len, fmt, ap);
+	size_t ret = StringFormatBuffer_va(buf, fmt, ap);
 
 	va_end(ap);
 	return ret;

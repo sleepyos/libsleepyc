@@ -10,9 +10,7 @@
 size_t NumberToStringRadix
 (long long int num, size_t radix, bool unsig, size_t zero_pad, char *buf)
 {
-	bool is_negative = false;
 	long long int tmp = num;
-	size_t decimal_places = NumberDecimalPlaces(num, radix);
 	size_t bufi = 0;
 
 	if (radix > 36)
@@ -22,7 +20,6 @@ size_t NumberToStringRadix
 
 	if (num < 0 && !unsig)
 	{
-		is_negative = true;
 		num = -num;
 		buf[bufi++] = '-';
 	}

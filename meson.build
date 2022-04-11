@@ -42,3 +42,11 @@ sleepyc_lib = static_library(
 
 unity_proj = subproject('unity')
 unity_dep = unity_proj.get_variable('unity_dep')
+
+test('string format', executable(
+	'test_string_format',
+	'test/string/format.c',
+	include_directories: sleepyc_include,
+	dependencies: unity_dep,
+	link_with: sleepyc_lib,
+))

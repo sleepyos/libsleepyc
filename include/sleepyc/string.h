@@ -32,6 +32,7 @@ typedef struct StringBuf {
 
 extern StringBuf_t StringBufNew(size_t);
 extern void StringBufFree(StringBuf_t);
+extern StringBuf_t StringBufFromRef(StringRef_t, size_t);
 
 /* string/format.c */
 

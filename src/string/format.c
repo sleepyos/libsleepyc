@@ -132,6 +132,7 @@ size_t StringFormatBuffer_va
 		fmti++;
 	}
 
+	buf.mut.len = bufi;
 	return bufi;
 }
 

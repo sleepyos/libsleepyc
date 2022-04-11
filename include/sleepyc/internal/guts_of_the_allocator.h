@@ -4,7 +4,7 @@
 #ifndef __SLEEPYC__GUTS_OF_THE_ALLOCATOR_H
 #define __SLEEPYC__GUTS_OF_THE_ALLOCATOR_H
 
-#pragma mark Memory region handling
+// Memory region handling
 
 typedef struct SCAllocatedRegion_s {
 	void *ptr;
@@ -20,11 +20,9 @@ extern SCAllocatedRegion_t *SCAllocatedRegion_getForPtr(void *);
 extern SCAllocatedRegion_t *SCAllocatedRegion_newFromPtrSize(void *, size_t);
 extern void SCAllocatedRegion_destroy(SCAllocatedRegion_t *);
 
-#pragma mark Raw allocation functions
+// Raw allocation functions
 
 extern void *MemoryAllocate__raw(size_t);
 extern void MemoryFree__raw(void *, size_t);
-
-#pragma mark -
 
 #endif /* __SLEEPYC__GUTS_OF_THE_ALLOCATOR_H */

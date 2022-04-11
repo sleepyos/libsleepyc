@@ -39,3 +39,6 @@ sleepyc_lib = static_library(
 		'-ffreestanding',
 	],
 )
+
+unity_proj = subproject('unity')
+unity_dep = unity_proj.get_variable('unity_dep')

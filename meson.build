@@ -1,5 +1,6 @@
 project('sleepyc', 'c', default_options: ['c_std=c11'])
 add_global_arguments('-U_FORTIFY_SOURCE', language: 'c')
+add_global_arguments('-D_DEFAULT_SOURCE', language: 'c')
 
 include_paths = [
 	'include/',

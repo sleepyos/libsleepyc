@@ -1,0 +1,4 @@
+option('platform', type: 'combo', choices: [
+	'linux',
+	'sleepyos',
+])

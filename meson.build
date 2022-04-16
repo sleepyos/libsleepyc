@@ -1,6 +1,4 @@
 project('sleepyc', 'c', default_options: ['c_std=c11'])
-add_global_arguments('-U_FORTIFY_SOURCE', language: 'c')
-add_global_arguments('-D_DEFAULT_SOURCE', language: 'c')
 
 include_paths = [
 	'include/',
@@ -39,6 +37,8 @@ sleepyc_lib = static_library(
 	c_args: [
 		'-nostdlib',
 		'-ffreestanding',
+		'-U_FORTIFY_SOURCE',
+		'-D_DEFAULT_SOURCE',
 	],
 )
 
@@ -46,10 +46,12 @@ sleepyc_dep = declare_dependency(link_with: sleepyc_lib, include_directories: sl
 
 ### test stuff ###
 
-unity_dep = subproject('unity').get_variable('unity_dep')
+if get_option('test')
+	unity_dep = subproject('unity').get_variable('unity_dep')
 
-test('string format', executable(
-	'test_string_format',
-	'test/string/format.c',
-	dependencies: [ unity_dep, sleepyc_dep ],
-))
+	test('StringFormat', executable(
+		'test_StringFormat',
+		'test/string/format.c',
+		dependencies: [ unity_dep, sleepyc_dep ],
+	))
+endif

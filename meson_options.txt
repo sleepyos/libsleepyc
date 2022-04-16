@@ -1,4 +1,7 @@
-option('platform', type: 'combo', choices: [
+option('platform', yield: true, type: 'combo', choices: [
 	'linux',
 	'sleepyos',
+	'sleepyldr',
 ])
+
+option('test', type: 'boolean', value: false)
